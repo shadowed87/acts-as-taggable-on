@@ -1,17 +1,12 @@
 module ActsAsTaggableOn::Taggable::TaggedWithQuery
   class AnyTagsQuery < QueryBase
     def build
-      taggable_model.select(all_fields)
-                    .where(model_has_at_least_one_tag)
+      taggable_model.where(model_has_at_least_one_tag)
                     .order(order_conditions)
                     .readonly(false)
     end
 
     private
-
-    def all_fields
-      taggable_arel_table[Arel.star]
-    end
 
     def model_has_at_least_one_tag
       tagging_alias = tagging_arel_table.alias(alias_name(tag_list))
